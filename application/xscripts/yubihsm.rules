@@ -1,0 +1,4 @@
+ACTION!="add|change", GOTO="yubihsm2_connector_end"
+ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="1050", OWNER="svchsm"
+ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="1050", ATTRS{idProduct}=="0030", TAG+="systemd", ENV{SYSTEMD_WANTS}="yubihsm-start.service"
+LABEL="yubihsm2_connector_end"
