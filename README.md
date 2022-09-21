@@ -11,6 +11,7 @@ By using the YubiHSM as the backbone of this architecture you not only have a mo
 - UDEV script (yubihsm.rules) will trigger the SystemD service (yubihsm-start.service). SystemD service will execute the hsminsert.sh script.
 
 <details><summary>On YubiHSM insert</summary>
+
 ```mermaid
 
 %%{init: {
