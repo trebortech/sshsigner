@@ -34,7 +34,6 @@ sequenceDiagram
   participant HSM
   participant UDEV
   Note over UDEV: /etc/udev/rules.d/yubihsm.rules
-  link UDEV: script @ https://github.com/trebortech/sshsigner/blob/064602445da8fc547ccbad813c3fccdccbd3ab4a/application/xscripts/yubihsm.rules
   participant SystemD
   Note over SystemD: /etc/systemd/system/yubihsm-start.service
   participant Script
