@@ -48,6 +48,8 @@ sequenceDiagram
 
 </details>
 
+- My test RPi has an oled screen. The IP address will show of the device. Script located at application/xscripts/oled.py
+
 
 #### RUN
 
@@ -65,4 +67,5 @@ python3 app_signer.py
 - [ ] Create Login Page
 - [ ] Create Sign Key page
 - [ ] Create walk through video
+- [ ] Create systemd script for oled and app
 - [ ] Update this README file
