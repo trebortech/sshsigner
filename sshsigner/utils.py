@@ -14,7 +14,7 @@ from binascii import b2a_hex
 from yubihsm import YubiHsm
 from yubihsm.objects import AsymmetricKey
 
-import application.ssh_requests as ssh_requests
+import sshsigner.ssh_requests as ssh_requests
 
 
 
@@ -40,8 +40,8 @@ def _run(cmd, mydata=""):
         print(f"Error running {cmd}")
 
 
-def createcert(name):
-    path = f"./application/ssl/{name}"
+def createcert(name, datadir):
+    path = f"{datadir}/ssl/{name}"
     hostname = socket.gethostname()
 
     # Check if certs already exist

@@ -6,15 +6,15 @@ import shutil
 
 import tornado.web
 
-import application.utils as UTILS
+import sshsigner.utils as UTILS
 
 PORTFILE="/usr/local/bin/ports.conf"
 
 class DefaultHandler(tornado.web.RequestHandler):
 
     def get(self):
-
-        path = f"./application/ssl/timestamp"
+        datadir = self.application.settings["datadir"]
+        path = f"{datadir}/ssl/timestamp"
         
         if os.path.exists(f"{path}.key"):
             self.redirect("/sshsigner")
@@ -25,7 +25,7 @@ class DefaultHandler(tornado.web.RequestHandler):
 class SetupHandler(tornado.web.RequestHandler):
 
     def get(self):
-
+        datadir = self.application.settings["datadir"]
         '''
         Deploy out scripts to handle auto configure of YubiHSM on insert
         '''
@@ -33,23 +33,23 @@ class SetupHandler(tornado.web.RequestHandler):
         if os.path.exists("/etc/udev/rules.d/yubihsm.rules"):
             print("udev rule already in place")
         else:
-            shutil.copy('./application/xscripts/yubihsm.rules', '/etc/udev/rules.d/yubihsm.rules')
+            shutil.copy('/xscripts/yubihsm.rules', '/etc/udev/rules.d/yubihsm.rules')
         
         if os.path.exists("/etc/systemd/system/yubihsm-start.service"):
             print("SystemD rule already in place")
         else:
-            shutil.copy('./application/xscripts/yubihsm-start.service', '/etc/systemd/system/yubihsm-start.service')
+            shutil.copy('/xscripts/yubihsm-start.service', '/etc/systemd/system/yubihsm-start.service')
             os.chmod('/etc/systemd/system/yubihsm-start.service', 360)
 
         if os.path.exists("/usr/local/bin/hsminsert.sh"):
             print("hsminsert already deployed")
         else:
-            shutil.copy('./application/xscripts/hsminsert.sh', '/usr/local/bin/hsminsert.sh')
+            shutil.copy('/xscripts/hsminsert.sh', '/usr/local/bin/hsminsert.sh')
             os.chmod('/usr/local/bin/hsminsert.sh', 360)
 
         hostname = socket.gethostname()
         # Creaet a timestamp cert if it doesn't already exist
-        timecert, timekey, message = UTILS.createcert("timestamp")
+        timecert, timekey, message = UTILS.createcert("timestamp", datadir)
         timecertfile = open(timecert, "r").read()
         pubkey = re.split("((-----BEGIN PUBLIC KEY-----)(.|\n)*(-----END PUBLIC KEY-----))", timecertfile)
 
@@ -65,6 +65,8 @@ class SignerHandler(tornado.web.RequestHandler):
 
 
     def post(self):
+        datadir = self.application.settings["datadir"]
+
         payload = json.loads(self.request.body)
         ret = []
         userid = payload.get("userid", "")
@@ -75,7 +77,7 @@ class SignerHandler(tornado.web.RequestHandler):
         principals = payload.get("principals", "")
         ssh_key = payload.get("sshkey", "")
        
-        host_tx_priv_key = open("./application/ssl/timestamp.key", "rb").read()
+        host_tx_priv_key = open(f"{datadir}/ssl/timestamp.key", "rb").read()
         
         hsmsession = UTILS.hsm_session(hsmport, userid, usercode)
         

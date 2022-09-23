@@ -48,7 +48,8 @@
             <select id="select-template">
                 <option>Select YubiHSM and Refresh</option>
             </select>
-            <button type="button" class="btn btn-outline-primary btn-sm" onclick="getTemplates();"> Refresh
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="getTemplates();">
+                <img class="tt-icon-pad" width="17" height="17" src="/static/sync.svg"></img> Refresh
             </button>
         </div>
         <div>
@@ -61,7 +62,10 @@
         </div>
         <div class="tt-spacer"></div>
         <div class="tt-center">
-            <div><button type="button" class="btn btn-warning" onclick="getTemplates();"> Sign Request
+            <div><button type="button" class="btn btn-outline-success" onclick="getTemplates();"><img
+                        class="tt-icon-pad" width="17" height="17" src="/static/signed.svg"></img>
+                    Sign
+                    Request
                 </button></div>
         </div>
     </div>

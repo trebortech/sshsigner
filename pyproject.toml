@@ -1,0 +1,43 @@
+[project]
+name = "tt-sshsigner"
+version = "22.09.23.1"
+description = "WebUI for SSH key signing with the YubiHSM"
+requires-python = ">=3.7, <4"
+authors = [
+    {name = "Robert Booth", email = "repo@trebortech.com"}
+    ]
+readme = "README.md"
+dependencies = [
+    'cryptography==37.0.4',
+    'certifi @ https://github.com/certifi/python-certifi/archive/refs/tags/2022.05.18.1.zip',
+    'html5lib @ https://github.com/html5lib/html5lib-python/archive/refs/tags/1.1.zip',
+    'mnemonic @ https://github.com/trezor/python-mnemonic/archive/refs/tags/v0.20.zip',
+    'tornado @ https://github.com/tornadoweb/tornado/archive/refs/tags/v6.2.0.zip',
+    'yubihsm @ https://github.com/Yubico/python-yubihsm/archive/refs/tags/2.1.1.zip',
+    'wheel @ https://files.pythonhosted.org/packages/c0/6c/9f840c2e55b67b90745af06a540964b73589256cb10cc10057c87ac78fc2/wheel-0.37.1.tar.gz',
+    'pyzmq @ https://github.com/zeromq/pyzmq/archive/refs/tags/v24.0.0.zip'
+]
+
+[tool.setuptools.packages.find]
+namespaces = true
+
+[tool.setuptools.package-data]
+"sshsigner.xscripts" = ["*"]
+"sshsigner.templates" = ["*"]
+"sshsigner.static" = ["*"]
+"sshsigner.static.css" = ["*"]
+"sshsigner.static.js" = ["*"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = "requirements.txt"}
+
+[project.urls]
+homepage = "https://github.com/trebortech/sshsigner"
+repository = "https://github.com/trebortech/sshsigner"
+
+[project.scripts]
+tt-sshsigner = "sshsigner.app_signer:main"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
