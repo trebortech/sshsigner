@@ -1,0 +1,35 @@
+.tt-main-body::before {
+    display: block;
+    content: '';
+    height: 60px;
+}
+
+.tt-body {
+    min-height: 100vh;
+    height: -webkit-fill-available;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    background: rgb(50, 96, 116);
+    background: linear-gradient(120deg, rgba(50, 96, 116, 0.5662640056022409) 17%, rgba(131, 185, 214, 0.01) 50%, rgba(131, 185, 214, 0.10968137254901966) 100%);
+}
+
+.tt-center {
+    text-align: center;
+}
+
+.tt-textbox {
+    font-size: small;
+}
+
+.tt-headertext {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.tt-input {
+    font-size: small;
+}
+
+.tt-spacer {
+    min-height: 10vh;
+}

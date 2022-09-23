@@ -1,9 +1,10 @@
+#cryptography @ https://github.com/pyca/cryptography/archive/refs/tags/38.0.1.zip
+cryptography==37.0.4
 certifi @ https://github.com/certifi/python-certifi/archive/refs/tags/2022.05.18.1.zip
 html5lib @ https://github.com/html5lib/html5lib-python/archive/refs/tags/1.1.zip
 requests @ https://github.com/psf/requests/archive/refs/tags/v2.28.1.zip
 mnemonic @ https://github.com/trezor/python-mnemonic/archive/refs/tags/v0.20.zip
 tornado @ https://github.com/tornadoweb/tornado/archive/refs/tags/v6.2.0.zip
-yubihsm @ https://github.com/Yubico/python-yubihsm/archive/refs/tags/2.1.0.zip
+yubihsm @ https://github.com/Yubico/python-yubihsm/archive/refs/tags/2.1.1.zip
 wheel @ https://files.pythonhosted.org/packages/c0/6c/9f840c2e55b67b90745af06a540964b73589256cb10cc10057c87ac78fc2/wheel-0.37.1.tar.gz
 pyzmq @ https://github.com/zeromq/pyzmq/archive/refs/tags/v24.0.0.zip
-

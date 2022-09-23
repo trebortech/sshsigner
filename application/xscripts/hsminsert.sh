@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PORTFILE=/usr/local/bin/ports.conf
-LISTENIP="0.0.0.0"
+LISTENIP="127.0.0.1"
 connector_path='/usr/bin/yubihsm-connector'
 
 # If the ports file does not exist create with a default port range
@@ -38,7 +38,7 @@ do
                     fi
                     # Start the process
                     ipport="$LISTENIP:$useport"
-                    /usr/bin/noup $connector_path --listen $ipport --serial $cleanserial &
+                    /usr/bin/nohup $connector_path --listen $ipport --serial $cleanserial &
                 fi
         fi
 done

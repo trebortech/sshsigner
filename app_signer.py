@@ -13,31 +13,17 @@ import application.utils as UTILS
 Before running this setup
 
 1. Install / Configure wireguard vpn
-2. Install / Configure hsm connector (HSM must be listening on port 1111)
-3. Add / Authorize hsm to management server
-
-
-hsm @ 127.0.0.1:1111
-
-hsm should be configured to listen on 172.16.0.0 and 127.0.0.1
-
-
+2. Add / Authorize hsm to management server
 '''
 
 
 def parse_options():
     usage = """\
-    rpi_image_grabber.py [options...]
-    This script will startup the image grabber service."""
+    app_signer.py [options...]
+    This script will startup the SSH Signer service."""
     parser = optparse.OptionParser(usage=usage)
 
     parser.add_option("-i", "--hsmipport", dest="hsmipport", default='', help="IP:Port for the YubiHSM",)
-    parser.add_option("-u", "--userid", dest="userid", default='', help="What userid for the YubiHSM",)
-    parser.add_option("-p", "--userpass", dest="userpass", default='', help="Password for the YubiHSM user",)
-    parser.add_option("-w", "--wrapid", dest="wrapid", default='', help="Wrap ID on the YubiHSM",)
-    parser.add_option("-b", "--bucketname", dest="bucketname", default='', help="Bucket name in AWS",)
-    parser.add_option("-l", "--localpath", dest="localpath", default='', help="Local path to store files",)
-    parser.add_option("-f", "--filename", dest="filename", default='', help="File to download",)
 
     options, _ = parser.parse_args()
     # All options are required
@@ -50,18 +36,10 @@ def parse_options():
 - hsm inserted
 
 
-# Setup
-DONE - Create certificate for SSL
-DONE - Create certificate for TimeServer (aka Signer Cert)
-
-DONE - Post TimeServer public cert
-DONE - Note to upload that cert to mgmt server before continuing
-
 # Running
 - Login of user HSM Pin 
 
 After Login
-
 - List of Templates to choose 
 - Box for user certificate to sign 
 
@@ -100,8 +78,10 @@ def app(options):
     }
 
     handlers = [
+        (r"/", SIGNER.DefaultHandler),
+        (r"/v1/data", SIGNER.DataHandler),
         (r"/setup", SIGNER.SetupHandler),
-        (r"/sshsigner", SIGNER.Signer)
+        (r"/sshsigner", SIGNER.SignerHandler)
         ]
 
     application = tornado.web.Application(handlers, **settings)
