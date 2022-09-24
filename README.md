@@ -7,10 +7,10 @@ By using the YubiHSM as the backbone of this architecture you not only have a mo
 
 #### Install
 
-* Requirements
+**Requirements**
 - yubihsm-connector
 - Linux OS
-- root install (lsusb requires it. still working on moving this to user)
+- root install[^root] 
 
 ```
 pip3 install https://github.com/trebortech/sshsigner/archive/refs/tags/22.09.23.1.tar.gz
@@ -87,3 +87,7 @@ python3 app_signer.py
 - [ ] Create walk through video
 - [ ] Create systemd script for oled and app
 - [ ] Update this README file
+
+
+
+[^root]: lsusb requires it. still working on moving this to user
