@@ -10,6 +10,7 @@ import tornado.web
 import sshsigner.signer as SIGNER
 import sshsigner.utils as UTILS
 
+currpath = os.path.realpath(__file__)[:- len(os.path.basename(__file__))]
 
 def parse_options():
     usage = """\
@@ -55,8 +56,8 @@ def app(options):
         "login_url": "/",
         "debug": True,
         "default_handler_class": DefaultHandler,
-        "template_path": "./templates",
-        "static_path": "./static",
+        "template_path": f"{currpath}/templates",
+        "static_path": f"{currpath}/static",
         "datadir": options.datadir,
     }
 
@@ -68,7 +69,7 @@ def app(options):
         ]
 
     application = tornado.web.Application(handlers, **settings)
-    http_server = tornado.httpserver.HTTPServer(application, ssl_options=ssl_ctx(options.dataadir))
+    http_server = tornado.httpserver.HTTPServer(application, ssl_options=ssl_ctx(options.datadir))
     http_server.listen(443)
     tornado.ioloop.IOLoop.instance().start()
 

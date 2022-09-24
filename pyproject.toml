@@ -7,6 +7,10 @@ authors = [
     {name = "Robert Booth", email = "repo@trebortech.com"}
     ]
 readme = "README.md"
+classifiers = [
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X"
+]
 dependencies = [
     'cryptography==37.0.4',
     'certifi @ https://github.com/certifi/python-certifi/archive/refs/tags/2022.05.18.1.zip',
@@ -27,9 +31,6 @@ namespaces = true
 "sshsigner.static" = ["*"]
 "sshsigner.static.css" = ["*"]
 "sshsigner.static.js" = ["*"]
-
-[tool.setuptools.dynamic]
-dependencies = {file = "requirements.txt"}
 
 [project.urls]
 homepage = "https://github.com/trebortech/sshsigner"

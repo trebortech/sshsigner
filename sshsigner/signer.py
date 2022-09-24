@@ -9,12 +9,13 @@ import tornado.web
 import sshsigner.utils as UTILS
 
 PORTFILE="/usr/local/bin/ports.conf"
+currpath = os.path.realpath(__file__)
 
 class DefaultHandler(tornado.web.RequestHandler):
 
     def get(self):
         datadir = self.application.settings["datadir"]
-        path = f"{datadir}/ssl/timestamp"
+        path = f"{datadir}/timestamp"
         
         if os.path.exists(f"{path}.key"):
             self.redirect("/sshsigner")
@@ -29,22 +30,22 @@ class SetupHandler(tornado.web.RequestHandler):
         '''
         Deploy out scripts to handle auto configure of YubiHSM on insert
         '''
-
+        
         if os.path.exists("/etc/udev/rules.d/yubihsm.rules"):
             print("udev rule already in place")
         else:
-            shutil.copy('/xscripts/yubihsm.rules', '/etc/udev/rules.d/yubihsm.rules')
+            shutil.copy(f'{currpath}/xscripts/yubihsm.rules', '/etc/udev/rules.d/yubihsm.rules')
         
         if os.path.exists("/etc/systemd/system/yubihsm-start.service"):
             print("SystemD rule already in place")
         else:
-            shutil.copy('/xscripts/yubihsm-start.service', '/etc/systemd/system/yubihsm-start.service')
+            shutil.copy(f'{currpath}/xscripts/yubihsm-start.service', '/etc/systemd/system/yubihsm-start.service')
             os.chmod('/etc/systemd/system/yubihsm-start.service', 360)
 
         if os.path.exists("/usr/local/bin/hsminsert.sh"):
             print("hsminsert already deployed")
         else:
-            shutil.copy('/xscripts/hsminsert.sh', '/usr/local/bin/hsminsert.sh')
+            shutil.copy(f'{currpath}/xscripts/hsminsert.sh', '/usr/local/bin/hsminsert.sh')
             os.chmod('/usr/local/bin/hsminsert.sh', 360)
 
         hostname = socket.gethostname()

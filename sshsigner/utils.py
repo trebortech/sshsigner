@@ -41,7 +41,7 @@ def _run(cmd, mydata=""):
 
 
 def createcert(name, datadir):
-    path = f"{datadir}/ssl/{name}"
+    path = f"{datadir}/{name}"
     hostname = socket.gethostname()
 
     # Check if certs already exist
