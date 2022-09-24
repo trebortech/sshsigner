@@ -5,6 +5,24 @@
 The goal of this applicaiton is to make an easy to deploy SSH CA environment. Passing the signing auhtority off to key organization individuals.
 By using the YubiHSM as the backbone of this architecture you not only have a more secure storage facility but also visibility to who is signing and when they are signing ssh keys.
 
+#### Install
+
+* Requirements
+- yubihsm-connector
+- Linux OS
+- root install (lsusb requires it. still working on moving this to user)
+
+```
+pip3 install https://github.com/trebortech/sshsigner/archive/refs/tags/22.09.23.1.tar.gz
+```
+
+Once installed
+```
+tt-sshsigner
+```
+
+-d = data directory. Defaults to /opt/sshsigner
+
 
 #### My Random Notes
 
@@ -60,11 +78,11 @@ python3 app_signer.py
 
 ##### TODO
 
-- [ ] Installation README with requirements
-- [ ] Installation scripts
+- [X] Installation README with requirements
+- [X] Installation scripts
 - [X] UDEV script to configure YubiHSM on insert
 - [X] Create "timestamp" cert
-- [ ] Create Login Page
+- [X] Create Login Page
 - [ ] Create Sign Key page
 - [ ] Create walk through video
 - [ ] Create systemd script for oled and app
