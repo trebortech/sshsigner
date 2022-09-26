@@ -33,3 +33,7 @@
 .tt-spacer {
     min-height: 10vh;
 }
+
+.tt-spacer-sm {
+    min-height: 5vh;
+}

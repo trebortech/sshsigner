@@ -99,5 +99,14 @@ async function signRequest() {
     postdata["principals"] = document.getElementById("text-sshname").value
     postdata["sshkey"] = document.getElementById("text-sshpk").value
 
-    var results = await postData("/v1/data", postdata)
+    var results = await postData("/sshsigner", postdata)
+
+    $('#modal-sshcert').modal('toggle')
+    document.getElementById("text-sshcert").value = results["principals"]
+}
+
+function clearwin(target, defaultval) {
+    if (document.getElementById(target).value == defaultval) {
+        document.getElementById(target).value = "";
+    }
 }

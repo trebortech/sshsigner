@@ -16,9 +16,9 @@
 
     <div class="tt-center">
         <div class="tt-headertext">
-            HOSTNAME: {{ hostname }}
+            Hostname: {{ hostname }}
         </div>
-        <div class="py-5">
+        <div class="py-2">
             All fields need to be complete before continuing.
         </div>
         <div>
@@ -41,7 +41,7 @@
             </div>
         </div>
     </div>
-    <div class="tt-spacer"></div>
+    <div class="tt-spacer-sm"></div>
     <div class="tt-center">
         <div>
             <label for="select-template" class="tt-">SSH Template</label>
@@ -54,19 +54,49 @@
         </div>
         <div>
             <label for="text-sshname" class="tt-">User SSH Login (principal) Name:</label>
-            <input type="text" class="tt-input" id="text-sshname" value="">
+            <input type="text" class="tt-input" id="text-sshname" value="comma separated"
+                onclick="clearwin('text-sshname','comma separated')">
+        </div>
+        <div class="tt-spacer-sm"></div>
+        <div>
+            <label for="text-sshpk" class="tt-">User Public Key (ssh-rsa only):</label>
         </div>
         <div>
-            <label for="text-sshpk" class="tt-">User Public Key:</label>
-            <input type="text" class="tt-input" id="text-sshpk" value="">
+            <textarea class="tt-textbox" rows=10 cols=80 id="text-sshpk"
+                onclick="clearwin('text-sshpk', 'ssh-rsa ...')">ssh-rsa ...</textarea>
         </div>
         <div class="tt-spacer"></div>
         <div class="tt-center">
-            <div><button type="button" class="btn btn-outline-success" onclick="getTemplates();"><img
-                        class="tt-icon-pad" width="17" height="17" src="/static/signed.svg"></img>
+            <div><button type="button" class="btn btn-outline-success" onclick="signRequest();"><img class="tt-icon-pad"
+                        width="17" height="17" src="/static/signed.svg"></img>
                     Sign
                     Request
                 </button></div>
+        </div>
+    </div>
+
+
+    <!-- Modal for certificate returend-->
+    <div>
+        <div class="modal fade" id="modal-sshcert" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="tt-modal-title" id="CertResponse">SSH Certificate</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row px-2">
+                            <textarea class="tt-textbox" rows=10 cols=80 id="text-sshcert"></textarea>
+                        </div>
+                        <div class="my-3 modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                EXIT
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

@@ -4,7 +4,9 @@ import re
 import os
 import time
 import struct
+from base64 import b64encode
 
+from cryptography import x509
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import padding, utils
@@ -14,7 +16,7 @@ from binascii import b2a_hex
 from yubihsm import YubiHsm
 from yubihsm.objects import AsymmetricKey
 
-import sshsigner.ssh_requests as ssh_requests
+import ssh_requests
 
 
 
@@ -78,7 +80,7 @@ def req(sshkey, hsmsession, ca_id, principals, host_tz_priv_key):
     cakey = get_pub_key(hsmsession, ca_id)
 
     ca_public_key = serialization.load_pem_public_key(cakey, backend=default_backend())
-    ssh_public_key = serialization.load_ssh_public_key(sshkey, backend=default_backend())
+    ssh_public_key = serialization.load_ssh_public_key(sshkey.encode(), backend=default_backend())
     host_tz_key = serialization.load_pem_private_key(host_tz_priv_key, password=None, backend=default_backend())
 
     identity = "user-identity"
@@ -117,13 +119,19 @@ def req(sshkey, hsmsession, ca_id, principals, host_tz_priv_key):
             utils.Prehashed(hashes.SHA256())
     )
 
-    with open('req.dat', 'wb') as f:
-        f.write(struct.pack('!I', now) + signature + req)
+    return struct.pack('!I', now) + signature + req
 
 
-def sign_req(hsmsession, ca_id, template_id, request):
+def sign_req(hsmsession, ca_id, template_id, request, comments="HCM Created"):
+    template_id = int(template_id)
     ca = AsymmetricKey(hsmsession, ca_id)
-    sshcert = ca.sign_ssh_certificate(template_id, request)
+    sshsig = ca.sign_ssh_certificate(template_id, request)
+
+    sshcert = b"ssh-rsa-cert-v01@openssh.com "
+    sshcert += b64encode(request[4 + 256:] + sshsig)
+    sshcert += b" "
+    sshcert += comments.encode()
+
     return sshcert
 
 
@@ -132,7 +140,7 @@ def get_pub_key(hsmsession, keyid):
     public_key = asymmkey.get_public_key()
     pem = public_key.public_bytes(
         encoding=serialization.Encoding.PEM,
-        format=serialization.PublicFormat.SubjectPublicKeyInfo).decode()
+        format=serialization.PublicFormat.SubjectPublicKeyInfo)
 
     return pem
 

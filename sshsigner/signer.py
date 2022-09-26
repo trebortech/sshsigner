@@ -3,10 +3,11 @@ import socket
 import json
 import os
 import shutil
+from cryptography.hazmat.primitives import serialization
 
 import tornado.web
 
-import sshsigner.utils as UTILS
+import utils as UTILS
 
 PORTFILE="/usr/local/bin/ports.conf"
 currpath = os.path.realpath(__file__)
@@ -69,22 +70,27 @@ class SignerHandler(tornado.web.RequestHandler):
         datadir = self.application.settings["datadir"]
 
         payload = json.loads(self.request.body)
-        ret = []
-        userid = payload.get("userid", "")
+        ret = {}
+
+        userid = int(payload.get("userid", ""))
         usercode = payload.get("usercode", "")
-        hsmport = payload.get("hsmport", "")
+        hsmport = int(payload.get("hsmport", ""))
         
         template_id, template_label, ca_id = payload.get("templateid", "").split("-")
-        principals = payload.get("principals", "")
-        ssh_key = payload.get("sshkey", "")
-       
-        host_tx_priv_key = open(f"{datadir}/ssl/timestamp.key", "rb").read()
         
+        principals = payload.get("principals", "").split(",")
+
+        ssh_key = payload.get("sshkey", "")
+        ca_id = int(ca_id)
+
+        host_tx_priv_key = open(f"{datadir}/timestamp.key", "rb").read()
+
         hsmsession = UTILS.hsm_session(hsmport, userid, usercode)
         
         req = UTILS.req(ssh_key, hsmsession, ca_id, principals, host_tx_priv_key)
-        ret = UTILS.sign_req(hsmsession, ca_id, template_id, req)
+        sshcert = UTILS.sign_req(hsmsession, ca_id, template_id, req)
 
+        ret["principals"] = sshcert.decode()
         self.write(str(ret))
 
 

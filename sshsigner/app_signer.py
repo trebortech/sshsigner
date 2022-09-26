@@ -2,13 +2,14 @@ import optparse
 import ssl
 import os
 
+
 # 3rd party modules
 import tornado.ioloop
 import tornado.web
 
 
-import sshsigner.signer as SIGNER
-import sshsigner.utils as UTILS
+import signer as SIGNER
+import utils as UTILS
 
 currpath = os.path.realpath(__file__)[:- len(os.path.basename(__file__))]
 
