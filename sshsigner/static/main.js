@@ -102,6 +102,8 @@ async function signRequest() {
     var results = await postData("/sshsigner", postdata)
 
     $('#modal-sshcert').modal('toggle')
+    navigator.clipboard.writeText(results["principals"]);
+    alert("Copied to clipboard")
     document.getElementById("text-sshcert").value = results["principals"]
 }
 
