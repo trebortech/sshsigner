@@ -32,17 +32,20 @@ class SetupHandler(tornado.web.RequestHandler):
         Deploy out scripts to handle auto configure of YubiHSM on insert
         '''
         
+        # UDEV Rules
         if os.path.exists("/etc/udev/rules.d/yubihsm.rules"):
             print("udev rule already in place")
         else:
             shutil.copy(f'{currpath}/xscripts/yubihsm.rules', '/etc/udev/rules.d/yubihsm.rules')
         
+        # SystemD Rules
         if os.path.exists("/etc/systemd/system/yubihsm-start.service"):
             print("SystemD rule already in place")
         else:
             shutil.copy(f'{currpath}/xscripts/yubihsm-start.service', '/etc/systemd/system/yubihsm-start.service')
             os.chmod('/etc/systemd/system/yubihsm-start.service', 360)
 
+        # HSM Init script
         if os.path.exists("/usr/local/bin/hsminsert.sh"):
             print("hsminsert already deployed")
         else:
