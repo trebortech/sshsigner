@@ -3,42 +3,18 @@ from __future__ import absolute_import, division
 import os
 import struct
 from cryptography.utils import int_to_bytes
+from cryptography.hazmat.primitives import serialization
 
-CERT_NAME = b'ssh-rsa-cert-v01@openssh.com'
-CERT_TYPE = 1  # 1 = user, 2 = host
-CA_KEY_TYPE = b'ssh-rsa'  
-
-'''
-CERT_NAME options
-ecdsa-sha2-nistp256-cert-v01@openssh.com
-ecdsa-sha2-nistp384-cert-v01@openssh.com
-ecdsa-sha2-nistp521-cert-v01@openssh.com
-ssh-ed25519-cert-v01@openssh.com
-
-rsa-sha2-256-cert-v01@openssh.com
-
-sk-ssh-ed25519@openssh.com
-
-
-CA_KEY_TYPE options
-rsa-sha2-256
-rsa-sha2-512
-ssh-ed25519
-
-* Not sure if this is needed or accepted
-sk-ssh-ed25519
-
-Need to try
-ssh-ed25519
-
-https://seankhliao.com/blog/12021-11-18-ssh-certificates/
-
-
-'''
 
 
 def create_request(ca_public_key, user_public_key, key_id, principals, options,
                    not_before, not_after, serial):
+
+    CERT_NAME = b'ssh-rsa-cert-v01@openssh.com'
+    #CERT_NAME = b'ssh-ed25519-cert-v01@openssh.com'
+    CERT_TYPE = 1  # 1 = user, 2 = host
+    CA_KEY_TYPE = b'ssh-rsa'  
+
     req = b''
 
     req += struct.pack('!I', len(CERT_NAME)) + CERT_NAME
@@ -46,15 +22,29 @@ def create_request(ca_public_key, user_public_key, key_id, principals, options,
     nonce = os.urandom(32)
     req += struct.pack('!I', len(nonce)) + nonce
 
-    numbers = user_public_key.public_numbers()
-    pubkey_e = int_to_bytes(numbers.e)
-    pubkey_n = int_to_bytes(numbers.n)
-    if pubkey_n[0] >= 0x80:
-        pubkey_n = b'\x00' + pubkey_n
+    if CERT_NAME == b'ssh-rsa-cert-v01@openssh.com':
+        # RSA type keys
+        numbers = user_public_key.public_numbers()
+        pubkey_e = int_to_bytes(numbers.e)
+        pubkey_n = int_to_bytes(numbers.n)
+        if pubkey_n[0] >= 0x80:
+            pubkey_n = b'\x00' + pubkey_n
 
-    req += struct.pack('!I', len(pubkey_e)) + pubkey_e
+        req += struct.pack('!I', len(pubkey_e)) + pubkey_e
 
-    req += struct.pack('!I', len(pubkey_n)) + pubkey_n
+        req += struct.pack('!I', len(pubkey_n)) + pubkey_n
+
+    if CERT_NAME == b'ssh-ed25519-cert-v01@openssh.com':
+        # ED25529 type keys
+        # Need to pull public cert
+        #
+        # This functionality is only available with RSA keys for the time being.
+        
+        numbers = user_public_key.public_bytes(
+            encoding=serialization.Encoding.Raw,
+            format=serialization.PublicFormat.Raw
+        )
+        req += struct.pack('!I', len(numbers)) + numbers
 
     req += struct.pack('!Q', serial)
 
@@ -82,17 +72,7 @@ def create_request(ca_public_key, user_public_key, key_id, principals, options,
     req += CRITICAL_OPTIONS
     req += struct.pack('!I', len(CRITICAL_OPTIONS))
 
-    '''
-    Critical Options / Extension Information https://man.openbsd.org/ssh-keygen#CERTIFICATES
 
-    hex to string conversion
-
-    permit-X11-forwarding
-    permit-agent-forwarding
-    permit-port-forwarding
-    permit-pty
-    permit-user-rc
-    '''
 
     EXTENSIONS = b'\x00\x00\x00\x15\x70\x65\x72\x6d\x69\x74\x2d\x58\x31\x31\x2d\x66\x6f\x72\x77\x61\x72\x64\x69\x6e\x67\x00\x00\x00\x00\x00\x00\x00\x17\x70\x65\x72\x6d\x69\x74\x2d\x61\x67\x65\x6e\x74\x2d\x66\x6f\x72\x77\x61\x72\x64\x69\x6e\x67\x00\x00\x00\x00\x00\x00\x00\x16\x70\x65\x72\x6d\x69\x74\x2d\x70\x6f\x72\x74\x2d\x66\x6f\x72\x77\x61\x72\x64\x69\x6e\x67\x00\x00\x00\x00\x00\x00\x00\x0a\x70\x65\x72\x6d\x69\x74\x2d\x70\x74\x79\x00\x00\x00\x00\x00\x00\x00\x0e\x70\x65\x72\x6d\x69\x74\x2d\x75\x73\x65\x72\x2d\x72\x63\x00\x00\x00\x00'  # noqa TODO(adma): FIXME
     req += struct.pack('!I', len(EXTENSIONS)) + EXTENSIONS

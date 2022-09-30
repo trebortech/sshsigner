@@ -81,6 +81,7 @@ def req(sshkey, hsmsession, ca_id, principals, host_tz_priv_key):
 
     ca_public_key = serialization.load_pem_public_key(cakey, backend=default_backend())
     ssh_public_key = serialization.load_ssh_public_key(sshkey.encode(), backend=default_backend())
+    #ssh_public_key = serialization.load_ssh_public_key(sshkey.encode(), backend='EllipticCurveBackend')
     host_tz_key = serialization.load_pem_private_key(host_tz_priv_key, password=None, backend=default_backend())
 
     identity = "user-identity"
@@ -125,8 +126,11 @@ def req(sshkey, hsmsession, ca_id, principals, host_tz_priv_key):
 def sign_req(hsmsession, ca_id, template_id, request, comments="HCM Created"):
     template_id = int(template_id)
     ca = AsymmetricKey(hsmsession, ca_id)
-    sshsig = ca.sign_ssh_certificate(template_id, request)
+    #algorithm = 23
+    algorithm = 1
+    sshsig = ca.sign_ssh_certificate(template_id, request, algorithm)
 
+    #sshcert = b"ssh-ed25519-cert-v01@openssh.com "
     sshcert = b"ssh-rsa-cert-v01@openssh.com "
     sshcert += b64encode(request[4 + 256:] + sshsig)
     sshcert += b" "
