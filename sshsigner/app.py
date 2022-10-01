@@ -1,7 +1,10 @@
 import optparse
 import ssl
 import os
+import sys
 
+currdir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(currdir)
 
 # 3rd party modules
 import tornado.ioloop

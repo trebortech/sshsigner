@@ -10,7 +10,7 @@ import tornado.web
 import utils as UTILS
 
 PORTFILE="/usr/local/bin/ports.conf"
-currpath = os.path.realpath(__file__)
+currdir = os.path.dirname(os.path.abspath(__file__))
 
 class DefaultHandler(tornado.web.RequestHandler):
 
@@ -36,20 +36,20 @@ class SetupHandler(tornado.web.RequestHandler):
         if os.path.exists("/etc/udev/rules.d/yubihsm.rules"):
             print("udev rule already in place")
         else:
-            shutil.copy(f'{currpath}/xscripts/yubihsm.rules', '/etc/udev/rules.d/yubihsm.rules')
+            shutil.copy(f'{currdir}/xscripts/yubihsm.rules', '/etc/udev/rules.d/yubihsm.rules')
         
         # SystemD Rules
         if os.path.exists("/etc/systemd/system/yubihsm-start.service"):
             print("SystemD rule already in place")
         else:
-            shutil.copy(f'{currpath}/xscripts/yubihsm-start.service', '/etc/systemd/system/yubihsm-start.service')
+            shutil.copy(f'{currdir}/xscripts/yubihsm-start.service', '/etc/systemd/system/yubihsm-start.service')
             os.chmod('/etc/systemd/system/yubihsm-start.service', 360)
 
         # HSM Init script
         if os.path.exists("/usr/local/bin/hsminsert.sh"):
             print("hsminsert already deployed")
         else:
-            shutil.copy(f'{currpath}/xscripts/hsminsert.sh', '/usr/local/bin/hsminsert.sh')
+            shutil.copy(f'{currdir}/xscripts/hsminsert.sh', '/usr/local/bin/hsminsert.sh')
             os.chmod('/usr/local/bin/hsminsert.sh', 360)
 
         hostname = socket.gethostname()

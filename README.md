@@ -13,8 +13,9 @@ By using the YubiHSM as the backbone of this architecture you not only have a mo
 - root install[^root] 
 
 ```
-pip3 install https://github.com/trebortech/sshsigner/archive/refs/tags/22.09.23.1.tar.gz
+pip3 install https://github.com/trebortech/sshsigner/archive/refs/tags/YY.MM.DD.BB.tar.gz
 ```
+Please update with the correct tag version you want to pull
 
 Once installed
 ```
