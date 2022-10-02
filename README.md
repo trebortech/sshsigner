@@ -4,15 +4,17 @@
 
 The goal of this applicaiton is to make an easy to deploy CA Signed SSH key environment. Restricting the signing auhtority to key organization individuals aka Key Custodians.
 By using the YubiHSM as the backbone of this architecture you not only have a more secure storage facility but also visibility to who is signing and when they are signing ssh keys.
-
-
+<br >
+<br >
+<br >
+👉 If you want to use this with a YubiHSM that is NOT managed by HCM you must build the template using the public key your installation creates. You must also format your Template label name with the ID of the CA object. In the example below that is 10. Example: SSH Template-10
+<br >
+<br >
+<br >
 ![Setup Page Image](media/image1.png)
 
 
 ![Setup Page Image](media/image2.png)
-
-
-
 
 
 ***
