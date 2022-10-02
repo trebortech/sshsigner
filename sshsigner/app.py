@@ -1,3 +1,6 @@
+'''
+This is the main launching point for the client SSH Signer webpage
+'''
 import optparse
 import ssl
 import os
@@ -10,11 +13,10 @@ sys.path.append(currdir)
 import tornado.ioloop
 import tornado.web
 
-
 import signer as SIGNER
 import utils as UTILS
 
-currpath = os.path.realpath(__file__)[:- len(os.path.basename(__file__))]
+#currpath = os.path.realpath(__file__)[:- len(os.path.basename(__file__))]
 
 def parse_options():
     usage = """\
@@ -60,8 +62,8 @@ def app(options):
         "login_url": "/",
         "debug": True,
         "default_handler_class": DefaultHandler,
-        "template_path": f"{currpath}/templates",
-        "static_path": f"{currpath}/static",
+        "template_path": f"{currdir}/templates",
+        "static_path": f"{currdir}/static",
         "datadir": options.datadir,
     }
 

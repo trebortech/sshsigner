@@ -52,13 +52,18 @@ class SetupHandler(tornado.web.RequestHandler):
             shutil.copy(f'{currdir}/xscripts/hsminsert.sh', '/usr/local/bin/hsminsert.sh')
             os.chmod('/usr/local/bin/hsminsert.sh', 360)
 
-        hostname = socket.gethostname()
-        # Creaet a timestamp cert if it doesn't already exist
+        mainmessage = "Your hostname is " + socket.gethostname()
+        # Create a timestamp cert if it doesn't already exist
         timecert, timekey, message = UTILS.createcert("timestamp", datadir)
         timecertfile = open(timecert, "r").read()
         pubkey = re.split("((-----BEGIN PUBLIC KEY-----)(.|\n)*(-----END PUBLIC KEY-----))", timecertfile)
 
-        self.render("setup.html", hostname=hostname, timeservercert=pubkey[1])
+        # Check if yubihsm connector already installed
+
+        if not shutil.which('yubihsm-connector'):
+            mainmessage = "You must install the yubihsm-connector"
+
+        self.render("setup.html", message=mainmessage, timeservercert=pubkey[1])
 
 
 class SignerHandler(tornado.web.RequestHandler):
