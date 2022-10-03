@@ -21,7 +21,7 @@ By using the YubiHSM as the backbone of this architecture you not only have a mo
 
 ## Install
 
-** Requirements **
+**Requirements**
 - yubihsm-connector
 - Linux OS
 - root install [^root] 
